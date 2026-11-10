@@ -1,0 +1,22 @@
+[
+  {
+    "userId": "0b6d6c1e-7c1a-4b52-9a51-0d1f00000001",
+    "orgId": "6f1e2a10-0000-4000-8000-000000000001",
+    "email": "alice@entralocal.dev",
+    "displayName": "Dr Alice Example",
+    "roles": ["INTENSIVIST"],
+    "regionId": "1",
+    "locationId": "101",
+    "active": true
+  },
+  {
+    "userId": "0b6d6c1e-7c1a-4b52-9a51-0d1f00000002",
+    "orgId": "6f1e2a10-0000-4000-8000-000000000001",
+    "email": "bob@entralocal.dev",
+    "displayName": "Bob Example",
+    "roles": ["INCHARGE_NURSE"],
+    "regionId": "1",
+    "locationId": "101",
+    "active": true
+  }
+]
