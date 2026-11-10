@@ -10,6 +10,9 @@
 services:
   entra-local:
     image: ghcr.io/cmaneu/entra-local:latest
+    # The image is published for amd64 only. On Apple Silicon, Docker runs it through
+    # emulation, so the first start can take a little longer.
+    platform: linux/amd64
     ports:
       - '127.0.0.1:8443:8443'
     volumes:

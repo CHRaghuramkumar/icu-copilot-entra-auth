@@ -10,6 +10,7 @@ import {
   signOut,
   type CopilotSession,
 } from '../lib/auth';
+import { webConfig } from '../lib/config';
 
 type State =
   | { kind: 'loading' }
@@ -24,6 +25,14 @@ function claimsOf(jwt: string): Record<string, unknown> {
 
 function describe(err: unknown): string {
   if (err instanceof AuthServiceError) return `${err.message} (${err.code})`;
+  const code = (err as { errorCode?: string } | null)?.errorCode;
+  if (code === 'endpoints_resolution_error') {
+    return `Could not reach the Microsoft sign-in server at ${webConfig.authority}. If you are using the local emulator, check that it is running and open ${webConfig.authority}/v2.0/.well-known/openid-configuration once to accept its certificate.`;
+  }
+  if (err instanceof TypeError) {
+    // fetch() rejects with a TypeError when the server is down or CORS blocks the call.
+    return `Could not reach the auth service at ${webConfig.authServiceUrl}. Is it running?`;
+  }
   return err instanceof Error ? err.message : 'Sign-in failed.';
 }
 
@@ -66,7 +75,13 @@ export default function Home() {
         {state.kind === 'signed-out' && (
           <>
             {state.error && <p className="error" role="alert">{state.error}</p>}
-            <button onClick={() => void signIn()}>Sign in with Microsoft</button>
+            <button
+              onClick={() =>
+                signIn().catch((err: unknown) => setState({ kind: 'signed-out', error: describe(err) }))
+              }
+            >
+              Sign in with Microsoft
+            </button>
           </>
         )}
 
@@ -85,7 +100,12 @@ export default function Home() {
               <dd>{state.session.expires_in} s</dd>
             </dl>
             <button onClick={() => void refresh()}>Refresh session</button>
-            <button className="secondary" onClick={() => void signOut()}>
+            <button
+              className="secondary"
+              onClick={() =>
+                signOut().catch((err: unknown) => setState({ kind: 'signed-out', error: describe(err) }))
+              }
+            >
               Sign out
             </button>
           </>

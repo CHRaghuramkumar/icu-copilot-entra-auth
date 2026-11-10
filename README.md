@@ -63,6 +63,15 @@ ICU Copilot token claims. `bob@entralocal.dev` signs in as an `INCHARGE_NURSE`.
 The demo users live in `auth-service/config/users.dev.json`. Change an email there to see the
 "not set up in the EMR" refusal.
 
+### Troubleshooting
+
+| What you see | Fix |
+| --- | --- |
+| `endpoints_resolution_error` / "Could not reach the Microsoft sign-in server" | The browser can't load the emulator's settings. Check `docker compose ps`, then open `https://localhost:8443/11111111-1111-1111-1111-111111111111/v2.0/.well-known/openid-configuration` and accept the self-signed certificate. |
+| "Could not reach the auth service" | Start `auth-service` (`npm run start:dev`) on port 4100. |
+| Auth service logs a TLS / certificate error when verifying tokens | `ENTRA_CA_CERT_PATH` must point at `.entra-local-data/tls/cert.pem`, which the emulator writes on first start. |
+| `EADDRINUSE :3000` | Something else is on port 3000. Stop it: the seeded emulator app only allows `http://localhost:3000` as the redirect URI. |
+
 ## How the user link works
 
 1. **Already linked:** match on the Entra object id (`oid` + tenant). Stable even if the email changes.
