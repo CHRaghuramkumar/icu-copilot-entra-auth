@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.next/
+next-env.d.ts
+*.tsbuildinfo
+coverage/
+.env
+.env.local
+.entra-local-data/
+*.pem
+.DS_Store
