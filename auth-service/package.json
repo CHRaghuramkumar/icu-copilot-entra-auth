@@ -9,7 +9,8 @@
     "start": "node --env-file-if-exists=.env dist/main.js",
     "start:dev": "node --env-file-if-exists=.env -r ts-node/register/transpile-only src/main.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "jest"
+    "test": "jest",
+    "e2e:emulator": "node scripts/e2e-emulator.mjs"
   },
   "engines": {
     "node": ">=22"

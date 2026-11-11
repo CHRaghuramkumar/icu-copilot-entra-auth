@@ -60,6 +60,20 @@ Open http://localhost:3000, click **Sign in with Microsoft**, and sign in as `al
 `Password1!` (seeded by the emulator). You should see Dr Alice Example, role `INTENSIVIST`, and the
 ICU Copilot token claims. `bob@entralocal.dev` signs in as an `INCHARGE_NURSE`.
 
+### End-to-end check without a browser
+
+With the emulator and the auth service running (steps 1 and 2 above):
+
+```bash
+cd auth-service
+npm run e2e:emulator
+```
+
+It signs Alice and Bob in at the emulator with Auth Code + PKCE (as MSAL does), swaps the Microsoft
+token at `/auth/entra/exchange`, verifies the ICU Copilot token against the published JWKS, then
+checks `/auth/me`, refresh, logout, and the refusals (wrong password, tampered token, ID token sent
+as an access token, foreign origin). It prints PASS/FAIL per step and exits 1 on any failure.
+
 The demo users live in `auth-service/config/users.dev.json`. Change an email there to see the
 "not set up in the EMR" refusal.
 
